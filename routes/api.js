@@ -1,5 +1,5 @@
 const express = require('express');
-const jwt = require('jwt');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/user')
 const mongoose = require('mongoose');
@@ -26,7 +26,7 @@ router.post('/register', (req, res) =>{
         }else{
             let payload = { subject: registedUser._id}
             let token = jwt.sign(payload, 'secretKey')
-            res.status(200).send(registedUser)
+            res.status(200).send({token})
         }
     })
 })
@@ -46,7 +46,9 @@ router.post('/login', (req, res)=>{
 
 
             }else{
-                res.status(200).send(user)
+                let payload = { subject: user._id}
+                let token = jwt.sign(payload, 'secretKey')
+                res.status(200).send({token})
             }
         }
     })
